@@ -1,0 +1,21 @@
+variable "aws_region" {
+  description = "AWS region to launch servers."
+  default     = "eu-central-1"
+}
+
+variable "aws_availability_zone" {
+  description = "AWS region to launch servers."
+  default     = "eu-central-1a"
+}
+
+provider "aws" {
+  access_key = "AWS_ACCESS_KEY"
+  secret_key = "AWS_SECRET_KEY"
+  region     = "${var.aws_region}"
+}
+
+resource "aws_key_pair" "deployer" {
+  key_name = "deployer-key" 
+  public_key = "ssh-rsa SSH_PUBLIC_KEY"
+}
+

@@ -1,0 +1,4 @@
+aws-config.tf
+.terraform
+terraform.tfstate
+terraform.tfstate.backup

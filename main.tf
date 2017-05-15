@@ -25,8 +25,7 @@ module "vpc" {
 
 module "emr" {
   source = "./emr"
-#  names = ["training-kku", "training-uel", "training-ren", "training-fpo"]
-  names = ["training-kku"]
+  names = ["training-kku", "training-uel", "training-ren", "training-fpo"]
   master_type = "m3.xlarge"
   worker_type = "m3.xlarge"
   worker_count = 2

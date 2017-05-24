@@ -4,7 +4,8 @@
 
 First of all you need to create an SSH key pair for securely accessing the cluster.
 
-    ssh-keygen -b 2048 -t rsa -C "EMR Access Key" -f deployer-key
+    ssh-keygen -t rsa -C "EMR Access Key" -f deployer-key
+    puttygen deployer-key -o deployer-key.ppk
 
 ## Create AWS Configuration
 
@@ -35,14 +36,14 @@ subnets, you also should adjust `foxy-proxy.xml` with the corresponding settings
 
 ## Connect to Cluster
 
-    ssh -i deployer_key hadoop@ec2-1-2-3-4.eu-central-1.compute.amazonaws.com
+    ssh -i deployer-key hadoop@ec2-1-2-3-4.eu-central-1.compute.amazonaws.com
 
 ## Web Connection
 
 You can create a proxy tunnel using SSH dynamic port forwarding, which again can
 be easily used with FoxyProxy plugin.
 
-    ssh -i deployer-key.pem -ND 8157 hadoop@ec2-1-2-3-4.eu-central-1.compute.amazonaws.com
+    ssh -i deployer-key -ND 8157 hadoop@ec2-1-2-3-4.eu-central-1.compute.amazonaws.com
 
 The URLs for the relevant services in EMR are as follows:
 

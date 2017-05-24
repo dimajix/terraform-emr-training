@@ -2,7 +2,7 @@
 
 AWS_INFO_DIR="/mnt/var/lib/info/"
 
-ANACONDA_PREFIX=/opt/anaconda3
+ANACONDA_PREFIX=/emr/anaconda3
 ANACONDA_VERSION=4.2.0
 ANACONDA_INSTALLER=Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh
 
@@ -28,6 +28,7 @@ install_anaconda() {
     #  -b silently accepts the license
     #  -p specifies the installation location
     sudo sh ${ANACONDA_INSTALLER} -f -b -p ${ANACONDA_PREFIX}
+    sudo rm -f ${ANACONDA_INSTALLER}
 }
 
 

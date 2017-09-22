@@ -52,5 +52,5 @@ The URLs for the relevant services in EMR are as follows:
     Hue - http://master:8888
     Zeppelin - http://master:8890
     Spark History - http://master:18080
-    Jupyter Notebook - http://master:8888
+    Jupyter Notebook - http://master:8899
 

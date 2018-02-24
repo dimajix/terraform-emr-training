@@ -1,4 +1,4 @@
-resource "aws_emr_cluster" "emr-cluster" {
+resource "aws_emr_cluster" "cluster" {
   count         = "${length(var.names)}"
   name          = "${element(var.names, count.index)}"
   release_label = "${var.release}"
@@ -13,6 +13,7 @@ resource "aws_emr_cluster" "emr-cluster" {
     instance_profile = "${aws_iam_instance_profile.training_ec2_profile.arn}"
   }
 
+  ebs_root_volume_size = "12"
   master_instance_type = "${var.master_type}"
   core_instance_type   = "${var.worker_type}"
   core_instance_count  = "${var.worker_count}"
@@ -25,10 +26,16 @@ resource "aws_emr_cluster" "emr-cluster" {
 
   depends_on = ["aws_security_group.master","aws_security_group.slave"]
 
-  bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/install-jupyter.sh"
-    name = "install-jupyter"
-  }
+  bootstrap_action = [
+    {
+      path = "s3://dimajix-training/scripts/aws/install-jupyter-5.0.1.sh"
+      name = "install-jupyter"
+    },
+    {
+      path = "s3://dimajix-training/scripts/aws/install-reverse-proxy.sh"
+      name = "install-reverse-proxy"
+      args = ["-d", "${var.proxy_domain}", "-u", "${var.proxy_user}", "-p", "${var.proxy_password}"]
+    }
+  ]
 }
-
 

@@ -1,0 +1,278 @@
+ProxyHTMLLinks	a		href
+ProxyHTMLLinks	area		href
+ProxyHTMLLinks	link		href
+ProxyHTMLLinks	img		src longdesc usemap
+ProxyHTMLLinks	object		classid codebase data usemap
+ProxyHTMLLinks	q		cite
+ProxyHTMLLinks	blockquote	cite
+ProxyHTMLLinks	ins		cite
+ProxyHTMLLinks	del		cite
+ProxyHTMLLinks	form		action
+ProxyHTMLLinks	input		src usemap
+ProxyHTMLLinks	head		profile
+ProxyHTMLLinks	base		href
+ProxyHTMLLinks	script		src for
+
+ProxyHTMLLinks	frame		src longdesc
+ProxyHTMLLinks	iframe		src longdesc
+ProxyHTMLLinks	body		background
+ProxyHTMLLinks	applet		codebase
+
+
+ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
+		onmouseover onmousemove onmouseout onkeypress \
+		onkeydown onkeyup onfocus onblur onload \
+		onunload onsubmit onreset onselect onchange
+
+
+<VirtualHost *:80>
+    ServerName {{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+     <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+    </Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName rm.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable On
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:20888 http://ap.{{aliasHostName}}
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8088/ /
+	<Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+        ProxyPass http://{{master.masterHostName}}:8088/
+        ProxyPassReverse /
+        Header unset X-Content-Type-Options
+	</Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName ap.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:20888/ /
+	<Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+    	ProxyPass http://{{master.masterHostName}}:20888/
+        ProxyPassReverse /
+        Header unset X-Content-Type-Options
+	</Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName nn.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
+    # RewriteRule ^/(.*) ws://azerty01:31321/$1 [P]
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+	ProxyHTMLURLMap http://{{master.masterHostName}}:50070/ /
+	<Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+    	ProxyPass http://{{master.masterHostName}}:50070/
+        ProxyPassReverse /
+        RequestHeader   unset   Accept-Encoding
+	</Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName hue.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8888/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:8888/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName hbase.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:16010/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:16010/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName jupyter.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8899/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:8899/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName zeppelin.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RequestHeader set X_FORWARDED_PROTO 'http'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
+    # RewriteRule ^/(.*) ws://azerty01:31321/$1 [P]
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8890/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+    	ProxyPass http://{{master.masterHostName}}:8890/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+    <Location /ws>
+        ProxyPass ws://{{master.masterHostName}}:8890/ws 
+        ProxyPassReverse ws://{{master.masterHostName}}:8890/ws
+    </Location>
+</VirtualHost>
+

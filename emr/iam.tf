@@ -119,8 +119,8 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "training_ec2_profile" {
-  name  = "training_ec2_profile"
-  roles = ["${aws_iam_role.training_ec2_role.name}"]
+  name = "training_ec2_profile"
+  role = "${aws_iam_role.training_ec2_role.name}"
 }
 
 resource "aws_iam_role_policy" "training_ec2_policy" {

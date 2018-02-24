@@ -1,0 +1,25 @@
+<html>
+<h1>Amazon EMR Environment</h1>
+
+<h2>Master Node</h2>
+<ul>
+<li><a href="http://rm.{{aliasHostName}}">YARN Resoucer Manager</a></li>
+<li><a href="http://nn.{{aliasHostName}}">HDFS Namenode</a></li>
+<!--<li><a href="/spark/">Spark History Server</a></li>-->	
+<li><a href="http://hbase.{{aliasHostName}}">HBase Server</a></li>
+<li><a href="http://hue.{{aliasHostName}}">Hue</a></li>
+<li><a href="http://jupyter.{{aliasHostName}}">Jupyter Notebook</a></li>
+<li><a href="http://zeppelin.{{aliasHostName}}">Zeppelin Notebook</a></li>
+</ul>
+
+<!--
+{{#nodes.node}}
+<h2>Worker Node {{id}}</h2>
+<ul>
+<li><a href="/node/{{nodeHostName}}/nm/">YARN NodeManager</a></li>
+<li><a href="/node/{{nodeHostName}}/dn/">HDFS DataNode</a></li>
+</ul>
+{{/nodes.node}}
+-->
+</html>
+

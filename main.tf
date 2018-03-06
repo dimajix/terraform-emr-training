@@ -25,7 +25,7 @@ module "vpc" {
 
 module "emr" {
   source = "./emr"
-  names = ["training-kku"]
+  names = ["kku"]
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","ZooKeeper", "HBase"]
   master_type = "m3.xlarge"
   worker_type = "m3.xlarge"
@@ -42,7 +42,7 @@ module "emr" {
 
 module route53 {
   source = "./route53"
-  names = ["kku"]
+  names = ["${module.emr.names}"]
   targets = ["${module.emr.master_public_dns}"]
   zone_name = "training.dimajix-aws.net"
   tags   = "${var.common_tags}"

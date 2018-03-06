@@ -34,7 +34,7 @@ resource "aws_emr_cluster" "cluster" {
     {
       path = "s3://dimajix-training/scripts/aws/install-reverse-proxy.sh"
       name = "install-reverse-proxy"
-      args = ["-d", "${var.proxy_domain}", "-u", "${var.proxy_user}", "-p", "${var.proxy_password}"]
+      args = ["-d", "${element(var.names, count.index)}.${var.proxy_domain}", "-u", "${var.proxy_user}", "-p", "${var.proxy_password}"]
     }
   ]
 }

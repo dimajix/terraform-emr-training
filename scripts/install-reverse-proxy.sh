@@ -15,8 +15,11 @@ install_reverse_proxy() {
     sudo mkdir /opt/reverse-proxy
     sudo aws s3 cp s3://dimajix-training/scripts/aws/reverse-proxy /opt/reverse-proxy --recursive
 
-    sudo python /opt/reverse-proxy/setup-reverse-proxy.py "$@"
-    sudo /etc/init.d/httpd start
+    # Run the last step in background, since the Python script needs
+    # YARN to be running. And YARN will be started after all bootstrap
+    # actions have been executed
+    sudo python /opt/reverse-proxy/setup-reverse-proxy.py "$@" && \
+    sudo /etc/init.d/httpd start & disown
 }
 
 

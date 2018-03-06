@@ -6,13 +6,21 @@ import os.path
 import sys
 import argparse
 import htpasswd
+import time
 
 curdir = os.path.abspath(os.path.dirname(__file__))
 
 
 def create_env(args):
     hostname = socket.getfqdn()
-    response = urllib2.urlopen("http://" + hostname + ":8088/ws/v1/cluster/nodes")
+    response = None
+
+    while not response:
+        try:
+            response = urllib2.urlopen("http://" + hostname + ":8088/ws/v1/cluster/nodes")
+        except:
+            time.sleep(1)
+        
     env = json.loads(response.read())
     env['master'] = {'masterHostName':hostname}
     env['aliasHostName'] = args.domain

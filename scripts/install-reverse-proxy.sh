@@ -10,7 +10,7 @@ is_master() {
 
 install_reverse_proxy() {
     sudo yum install -y httpd24 mod24_proxy_html
-    sudo pip install htpasswd
+    sudo pip install htpasswd urllib3 pystache requests
 
     sudo mkdir /opt/reverse-proxy
     sudo aws s3 cp s3://dimajix-training/scripts/aws/reverse-proxy /opt/reverse-proxy --recursive

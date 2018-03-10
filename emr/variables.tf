@@ -1,7 +1,9 @@
 variable "names" { default=["emr-cluster"] }
 variable "worker_count" { default=2 }
 variable "worker_type" { default="m3.xlarge" }
+variable "worker_bid_price" { default="0.30" }
 variable "master_type" { default="m3.xlarge" }
+variable "master_bid_price" { default="0.30" }
 variable "release" { default = "emr-5.12.0" }
 variable "applications" { default = ["Spark","Hadoop","Pig","Hue","Zeppelin","Hive","HCatalog","HBase","Presto","Tez","ZooKeeper"] }
 variable "vpc_id" { }

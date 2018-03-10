@@ -14,15 +14,26 @@ resource "aws_emr_cluster" "cluster" {
   }
 
   ebs_root_volume_size = "12"
-  master_instance_type = "${var.master_type}"
-  core_instance_type   = "${var.worker_type}"
-  core_instance_count  = "${var.worker_count}"
+
+  instance_group {
+      instance_role = "MASTER"
+      instance_type = "${var.master_type}"
+      instance_count = "1"
+      bid_price = "${var.master_bid_price}"
+  }
+
+  instance_group {
+      instance_role = "CORE"
+      instance_type = "${var.worker_type}"
+      instance_count = "${var.worker_count}"
+      bid_price = "${var.worker_bid_price}"
+  }
 
   tags = "${merge(var.tags, map("name", element(var.names, count.index)))}"
 
   # configurations = "test-fixtures/emr_configurations.json"
 
-  service_role = "${aws_iam_role.training_emr_role.arn}"
+  service_role = "${aws_iam_role.training_emr_service_role.arn}"
 
   depends_on = ["aws_security_group.master","aws_security_group.slave"]
 

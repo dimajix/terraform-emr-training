@@ -28,8 +28,10 @@ module "emr" {
   names = ["kku"]
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","ZooKeeper", "HBase"]
   master_type = "m3.xlarge"
+  master_bid_price = "0.07"
   worker_type = "m3.xlarge"
-  worker_count = 2
+  worker_bid_price = "0.07"
+  worker_count = 1
   vpc_id = "${module.vpc.vpc_id}"
   subnet_ids = ["${module.vpc.public_subnets}"]
   ssh_key_ids = ["${aws_key_pair.deployer.id}"]

@@ -1,6 +1,6 @@
 # IAM role for EMR Service
-resource "aws_iam_role" "training_emr_role" {
-  name = "training_emr_role"
+resource "aws_iam_role" "training_emr_service_role" {
+  name = "training_emr_service_role"
 
   assume_role_policy = <<EOF
 {
@@ -19,9 +19,9 @@ resource "aws_iam_role" "training_emr_role" {
 EOF
 }
 
-resource "aws_iam_role_policy" "training_emr_policy" {
-  name = "training_emr_policy"
-  role = "${aws_iam_role.training_emr_role.id}"
+resource "aws_iam_role_policy" "training_emr_service_policy" {
+  name = "training_emr_service_policy"
+  role = "${aws_iam_role.training_emr_service_role.id}"
 
   policy = <<EOF
 {
@@ -92,6 +92,16 @@ resource "aws_iam_role_policy" "training_emr_policy" {
             "application-autoscaling:DeleteScalingPolicy",
             "application-autoscaling:Describe*"
         ]
+    },
+    {
+        "Effect": "Allow",
+        "Action": "iam:CreateServiceLinkedRole",
+        "Resource": "arn:aws:iam::*:role/aws-service-role/spot.amazonaws.com/AWSServiceRoleForEC2Spot*",
+        "Condition": {
+            "StringLike": {
+                "iam:AWSServiceName": "spot.amazonaws.com"
+            }
+        }
     }]
 }
 EOF

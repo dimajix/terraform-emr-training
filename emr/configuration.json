@@ -1,0 +1,52 @@
+[{
+  "Classification": "hue-ini",
+  "Properties": {},
+  "Configurations": [
+    {
+      "Classification": "librdbms",
+      "Properties": {},
+      "Configurations": [
+        {
+          "Classification": "databases",
+          "Properties": {},
+          "Configurations": [
+            {
+              "Classification": "mysql",
+              "Properties": {
+                "nice_name": "MySQL Training DB",
+                "name": "training",
+                "engine": "mysql",
+                "host": "localhost",
+                "port": "3306",
+                "user": "user",
+                "password": "user"
+              },
+              "Configurations": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Classification": "notebook",
+      "Properties": {},
+      "Configurations": [
+        {
+          "Classification": "interpreters",
+          "Properties": {},
+          "Configurations": [
+            {
+              "Classification": "mysql",
+              "Properties": {
+                "name": "MySQL Training DB",
+                "interface": "rdbms"
+              },
+              "Configurations": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}]
+

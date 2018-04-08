@@ -31,13 +31,18 @@ resource "aws_emr_cluster" "cluster" {
 
   tags = "${merge(var.tags, map("name", element(var.names, count.index)))}"
 
-  # configurations = "test-fixtures/emr_configurations.json"
+  # configurations = "s3://dimajix-training/scripts/aws/emr-configurations.json"
+  configurations = "${file("emr/configuration.json")}"
 
   service_role = "${aws_iam_role.training_emr_service_role.arn}"
 
   depends_on = ["aws_security_group.master","aws_security_group.slave"]
 
   bootstrap_action = [
+    {
+      path = "s3://dimajix-training/scripts/aws/setup-training.sh"
+      name = "setup-training"
+    },
     {
       path = "s3://dimajix-training/scripts/aws/install-jupyter-5.0.1.sh"
       name = "install-jupyter"

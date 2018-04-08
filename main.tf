@@ -26,7 +26,7 @@ module "vpc" {
 module "emr" {
   source = "./emr"
   names = ["kku"]
-  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","ZooKeeper", "HBase"]
+  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive"]
   master_type = "m3.xlarge"
   master_bid_price = "0.07"
   worker_type = "m3.xlarge"

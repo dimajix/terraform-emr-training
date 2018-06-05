@@ -62,6 +62,8 @@ configure_kafka() {
     echo " " >> /tmp/server.properties
     echo "# replication factor" >> /tmp/server.properties
     echo "default.replication.factor=${repl_factor}" >> /tmp/server.properties
+    echo "# enable topic delete" >> /tmp/server.properties
+    echo "delete.topic.enable=true" >> /tmp/server.properties
 
     sudo mv -f /tmp/server.properties config/server.properties
 

@@ -20,6 +20,11 @@ resource "aws_emr_cluster" "cluster" {
       instance_type = "${var.master_type}"
       instance_count = "1"
       bid_price = "${var.master_bid_price}"
+      ebs_config {
+        size = "${var.master_ebs_size}"
+        type = "gp2"
+        volumes_per_instance = 1
+      }
   }
 
   instance_group {
@@ -27,6 +32,11 @@ resource "aws_emr_cluster" "cluster" {
       instance_type = "${var.worker_type}"
       instance_count = "${var.worker_count}"
       bid_price = "${var.worker_bid_price}"
+      ebs_config {
+        size = "${var.worker_ebs_size}"
+        type = "gp2"
+        volumes_per_instance = 1
+      }
   }
 
   tags = "${merge(var.tags, map("name", element(var.names, count.index)))}"
@@ -42,6 +52,10 @@ resource "aws_emr_cluster" "cluster" {
     {
       path = "s3://dimajix-training/scripts/aws/setup-training.sh"
       name = "setup-training"
+    },
+    {
+      path = "s3://dimajix-training/scripts/aws/install-kafka.sh"
+      name = "install-kafka"
     },
     {
       path = "s3://dimajix-training/scripts/aws/install-jupyter-5.0.1.sh"

@@ -26,11 +26,13 @@ module "vpc" {
 module "emr" {
   source = "./emr"
   names = ["kku"]
-  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive"]
-  master_type = "m3.xlarge"
-  master_bid_price = "0.07"
-  worker_type = "m3.xlarge"
-  worker_bid_price = "0.07"
+  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
+  master_type = "m4.xlarge"
+  master_ebs_size = "20"
+  master_bid_price = "0.08"
+  worker_type = "m4.2xlarge"
+  worker_ebs_size = "20"
+  worker_bid_price = "0.16"
   worker_count = 1
   vpc_id = "${module.vpc.vpc_id}"
   subnet_ids = ["${module.vpc.public_subnets}"]

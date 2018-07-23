@@ -213,6 +213,10 @@ ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
     RequestHeader set X-Forwarded-Port "80"
 
     RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
 
     ProxyVia Off
     ProxyRequests off
@@ -235,6 +239,14 @@ ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
     </Location>
+    <Location /api/kernels/>
+        ProxyPass ws://{{master.masterHostName}}:8899/api/kernels/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/api/kernels/
+    </Location>
+    <Location /terminals/websocket/>
+        ProxyPass ws://{{master.masterHostName}}:8899/terminals/websocket/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/terminals/websocket/
+    </Location>
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -246,7 +258,10 @@ ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
     RequestHeader set X-Forwarded-Port "80"
 
     RewriteEngine On
-    RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
+    RewriteCond %{REQUEST_URI} ^/ws [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+    # RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
     # RewriteRule ^/(.*) ws://azerty01:31321/$1 [P]
 
     ProxyVia Off

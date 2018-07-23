@@ -25,18 +25,22 @@ module "vpc" {
 
 module "emr" {
   source = "./emr"
+  release = "emr-5.14.0"
   names = ["kku"]
-  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive"]
-  master_type = "m3.xlarge"
-  master_bid_price = "0.07"
-  worker_type = "m3.xlarge"
-  worker_bid_price = "0.07"
+  # names = ["kku","cl1","cl2","cl3","cl4","cl5","cl6"]
+  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
+  master_type = "m4.xlarge"
+  master_ebs_size = "40"
+  master_bid_price = "0.08"
+  worker_type = "m4.xlarge"
+  worker_ebs_size = "40"
+  worker_bid_price = "0.16"
   worker_count = 1
   vpc_id = "${module.vpc.vpc_id}"
   subnet_ids = ["${module.vpc.public_subnets}"]
   ssh_key_ids = ["${aws_key_pair.deployer.id}"]
   proxy_domain = "training.dimajix-aws.net"
-  proxy_user = "dimajix-training"
+  proxy_user = "datalab"
   proxy_password = "dmx2018"
   tags   = "${var.common_tags}"
 }

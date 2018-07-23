@@ -50,7 +50,7 @@ install_pyspark_kernel() {
     sudo mkdir -p ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3
     sudo tee ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3/kernel.json >/dev/null <<EOL
 {
- "display_name": "PySpark 2.2 (Python 3.6)",
+ "display_name": "PySpark 2.3 (Python 3)",
  "language": "python",
  "argv": [
   "${ANACONDA_PREFIX}/bin/python3",
@@ -63,27 +63,9 @@ install_pyspark_kernel() {
   "SPARK_HOME": "${SPARK_HOME}",
   "PYTHONPATH": "${SPARK_HOME}/python/:${SPARK_HOME}/python/lib/py4j-src.zip",
   "PYTHONSTARTUP": "${SPARK_HOME}/python/pyspark/shell.py",
-  "PYTHONHASHSEED": "0",
-  "SPARK_YARN_USER_ENV": "PYTHONHASHSEED=0",
   "PYSPARK_PYTHON": "${ANACONDA_PREFIX}/bin/python3",
   "PYSPARK_SUBMIT_ARGS": "--master ${SPARK_MASTER} --driver-memory=2G --executor-cores=2 --executor-memory=2G --num-executors=2 pyspark-shell"
  }
-}
-EOL
-}
-
-
-install_python_kernel() {
-    sudo mkdir -p ${ANACONDA_PREFIX}/share/jupyter/kernels/IPython
-    sudo tee ${ANACONDA_PREFIX}/share/jupyter/kernels/IPython/kernel.json > /dev/null <<EOL
-{
- "display_name": "Python 3.6",
- "language": "python",
- "argv": [
-    "python3", 
-    "-m", "ipykernel",
-    "-f", "{connection_file}"
-  ]
 }
 EOL
 }
@@ -183,7 +165,6 @@ if is_master;
 then
     configure_jupyter_notebook
     install_pyspark_kernel
-    install_python_kernel
     install_startup
 fi
 

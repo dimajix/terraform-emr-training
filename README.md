@@ -27,7 +27,7 @@ subnets, you also should adjust `foxy-proxy.xml` with the corresponding settings
 
 ## Start Cluster
 
-    terraform get
+    terraform init
     terraform apply
 
 ## Destroy Cluster
@@ -53,4 +53,11 @@ The URLs for the relevant services in EMR are as follows:
     Zeppelin - http://master:8890
     Spark History - http://master:18080
     Jupyter Notebook - http://master:8899
+
+# Manual Cleanup
+
+aws iam remove-role-from-instance-profile --role-name training_ec2_role --instance-profile-name training_ec2_profile
+aws iam delete-instance-profile --instance-profile-name training_ec2_profile
+
+
 

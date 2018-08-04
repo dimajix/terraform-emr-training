@@ -25,7 +25,7 @@ module "vpc" {
 
 module "emr" {
   source = "./emr"
-  release = "emr-5.14.0"
+  release = "emr-5.16.0"
   names = ["kku"]
   # names = ["kku","cl1","cl2","cl3","cl4","cl5","cl6"]
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]

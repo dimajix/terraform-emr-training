@@ -6,7 +6,7 @@ variable "worker_ebs_size" { default="80" }
 variable "master_type" { default="m3.xlarge" }
 variable "master_bid_price" { default="0.30" }
 variable "master_ebs_size" { default="80" }
-variable "release" { default = "emr-5.13.0" }
+variable "release" { default = "emr-5.16.0" }
 variable "applications" { default = ["Spark","Hadoop","Pig","Hue","Zeppelin","Hive","HCatalog","HBase","Presto","Tez","ZooKeeper"] }
 variable "vpc_id" { }
 variable "subnet_ids" { default=[] }

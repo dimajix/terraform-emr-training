@@ -1,0 +1,103 @@
+<VirtualHost *:80>
+    ServerName jupyter.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RemoteIPHeader X-Forwarded-For
+    RequestHeader set X-Forwarded-Proto 'http'
+    RequestHeader set X-Forwarded-Host 'jupyter.{{aliasHostName}}:80'
+    RequestHeader set X-Forwarded-Server 'jupyter.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8899/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:8899/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+    <Location /api/kernels/>
+        ProxyPass ws://{{master.masterHostName}}:8899/api/kernels/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/api/kernels/
+    </Location>
+    <Location /terminals/websocket/>
+        ProxyPass ws://{{master.masterHostName}}:8899/terminals/websocket/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/terminals/websocket/
+    </Location>
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    ServerName jupyter.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    SSLEngine On
+    SSLCompression off
+    SSLProtocol all -SSLv2 -SSLv3
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
+    SSLCertificateFile /etc/httpd/ssl/jupyter.{{aliasHostName}}.cert
+ 
+    RemoteIPHeader X-Forwarded-For
+    RequestHeader set X-Forwarded-Proto 'https'
+    RequestHeader set X-Forwarded-Host 'jupyter.{{aliasHostName}}:443'
+    RequestHeader set X-Forwarded-Server 'jupyter.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Port "443"
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8899/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+            ProxyPass http://{{master.masterHostName}}:8899/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+    <Location /api/kernels/>
+        ProxyPass ws://{{master.masterHostName}}:8899/api/kernels/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/api/kernels/
+    </Location>
+    <Location /terminals/websocket/>
+        ProxyPass ws://{{master.masterHostName}}:8899/terminals/websocket/
+        ProxyPassReverse ws://{{master.masterHostName}}:8899/terminals/websocket/
+    </Location>
+</VirtualHost>
+

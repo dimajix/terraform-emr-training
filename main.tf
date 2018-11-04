@@ -34,13 +34,13 @@ module "emr" {
   master_bid_price = "0.08"
   worker_type = "m4.xlarge"
   worker_ebs_size = "40"
-  worker_bid_price = "0.16"
+  worker_bid_price = "0.18"
   worker_count = 1
   vpc_id = "${module.vpc.vpc_id}"
   subnet_ids = ["${module.vpc.public_subnets}"]
   ssh_key_ids = ["${aws_key_pair.deployer.id}"]
   proxy_domain = "training.dimajix-aws.net"
-  proxy_user = "datalab"
+  proxy_user = "dimajix"
   proxy_password = "dmx2018"
   tags   = "${var.common_tags}"
 }

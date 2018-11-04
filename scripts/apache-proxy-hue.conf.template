@@ -1,0 +1,78 @@
+<VirtualHost *:80>
+    ServerName hue.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RemoteIPHeader X-Forwarded-For
+    RequestHeader set X-Forwarded-Proto 'http'
+    RequestHeader set X-Forwarded-Host 'hue.{{aliasHostName}}:80'
+    RequestHeader set X-Forwarded-Server 'hue.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Port "80"
+
+    RewriteEngine On
+
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8888/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:8888/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    ServerName hue.{{aliasHostName}}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    SSLEngine On
+    SSLCompression off
+    SSLProtocol all -SSLv2 -SSLv3
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
+    SSLCertificateFile /etc/httpd/ssl/hue.{{aliasHostName}}.cert
+
+    RemoteIPHeader X-Forwarded-For
+    RequestHeader set X-Forwarded-Proto 'https'
+    RequestHeader set X-Forwarded-Host 'hue.{{aliasHostName}}:443'
+    RequestHeader set X-Forwarded-Server 'hue.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Port "443"
+
+    RewriteEngine On
+    ProxyVia Off
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyHTMLEnable Off
+    ProxyHTMLMeta Off
+    ProxyHTMLExtended Off
+    AllowEncodedSlashes NoDecode
+
+    ProxyHTMLURLMap http://{{master.masterHostName}}:8888/ /
+    <Location />
+        AuthType Basic
+        AuthName "Dimajix Training Environment"
+        AuthBasicProvider file
+        AuthUserFile "{{htpasswd}}"
+        Require user {{username}}
+
+	    ProxyPass http://{{master.masterHostName}}:8888/
+        ProxyPassReverse /
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
+</VirtualHost>
+

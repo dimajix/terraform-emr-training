@@ -9,7 +9,7 @@ broker_id="0"
 
 repo="http://apache.org/dist/kafka"
 scala_version="2.11"
-kafka_version="1.0.1"
+kafka_version="1.0.2"
 num_partitions="16"
 repl_factor="1"
 log_retention="168"

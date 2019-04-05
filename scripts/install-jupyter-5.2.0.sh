@@ -52,7 +52,7 @@ install_pyspark_kernel() {
     sudo mkdir -p ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3
     sudo tee ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3/kernel.json >/dev/null <<EOL
 {
- "display_name": "PySpark 2.3 (Python 3)",
+ "display_name": "PySpark 2.4 (Python 3)",
  "language": "python",
  "argv": [
   "${ANACONDA_PREFIX}/bin/python3",

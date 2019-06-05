@@ -31,7 +31,6 @@ The following properties can be set in the `emr` section in `main.tf`:
 * `proxy_domain` Specify set the Route53 zone name for registering the
   web-interfaces to the public DNS. This setting has to match the corresponding
   domain name and will be used for setting up the reverse proxy
-  # Configuration: Set the user name for basic auth
 * `proxy_user` Configure the user name used for basic http authentication. This
 provides a very basic level of security for the clusters.
 * `proxy_password` Configure the corresponding password for http basic auth to

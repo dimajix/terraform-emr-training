@@ -26,6 +26,30 @@ settings in `main.tf`. Per default four EMR clusters will be created, each
 having two nodes (one master and one worker). At least you need to specify
 the Route53 zone to use.
 
+The following properties can be set in the `emr` section in `main.tf`:
+
+* `proxy_domain` Specify set the Route53 zone name for registering the
+  web-interfaces to the public DNS. This setting has to match the corresponding
+  domain name and will be used for setting up the reverse proxy
+  # Configuration: Set the user name for basic auth
+* `proxy_user` Configure the user name used for basic http authentication. This
+provides a very basic level of security for the clusters.
+* `proxy_password` Configure the corresponding password for http basic auth to
+the web interfaces.
+* `names` Configures the names of the clusters. For each name a separate EMR
+  cluster will be created.
+* `release` Specfify the desired EMR release
+* `application` Specify the EMR components to be installed.
+* `master_type` Set the desired EC2 instance type for the master
+* `worker_type` Set the desired EC2 instance type for the worker
+
+In addition the following properties can be set in the `route53` section
+in `main.tf`:
+
+* `zone_name` Again this needs to contain the Route53 zone name where all
+DNS entries are created. The scripts will NOT create this zone, it has be
+be provided by you in advance.
+
 You also might want to change the network configuration, but if you change the
 subnets, you also should adjust `foxy-proxy.xml` with the corresponding settings.
 

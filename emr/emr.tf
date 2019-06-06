@@ -15,10 +15,8 @@ resource "aws_emr_cluster" "cluster" {
 
   ebs_root_volume_size = "12"
 
-  instance_group {
-      instance_role = "MASTER"
+  master_instance_group {
       instance_type = "${var.master_type}"
-      instance_count = "1"
       bid_price = "${var.master_bid_price}"
       ebs_config {
         size = "${var.master_ebs_size}"
@@ -27,8 +25,7 @@ resource "aws_emr_cluster" "cluster" {
       }
   }
 
-  instance_group {
-      instance_role = "CORE"
+  core_instance_group {
       instance_type = "${var.worker_type}"
       instance_count = "${var.worker_count}"
       bid_price = "${var.worker_bid_price}"

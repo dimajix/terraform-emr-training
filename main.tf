@@ -1,5 +1,5 @@
 variable "common_tags" {
-  type = "map"
+  type = map(string)
   default = {
     builtWith = "terraform"
     terraformGroup = "training-dmx"
@@ -9,8 +9,8 @@ variable "common_tags" {
 
 module "vpc" {
   source = "./vpc"
-  name = "training-vpc"
-  tags     = "${var.common_tags}"
+  name  = "training-vpc"
+  tags  = var.common_tags
 
   cidr = "10.200.0.0/16"
   private_subnets = ["10.200.1.0/24"]
@@ -19,13 +19,13 @@ module "vpc" {
   enable_s3_endpoint = "true"
   enable_dns_hostnames = "true"
   enable_dns_support = "true"
-  azs      = "${var.aws_availability_zones}"
+  azs      = var.aws_availability_zones
 }
 
 
 module "emr" {
   source = "./emr"
-  tags   = "${var.common_tags}"
+  tags   = var.common_tags
 
   # Configuration: Set the Route53 zone name
   proxy_domain = "training.dimajix-aws.net"
@@ -43,9 +43,9 @@ module "emr" {
   worker_ebs_size = "40"
   worker_count = 1
 
-  vpc_id = "${module.vpc.vpc_id}"
-  subnet_ids = ["${module.vpc.public_subnets}"]
-  ssh_key_ids = ["${aws_key_pair.deployer.id}"]
+  vpc_id = module.vpc.vpc_id
+  subnet_ids = module.vpc.public_subnets
+  ssh_key_ids = [aws_key_pair.deployer.id]
   
   # Configuration: Set the user name for basic auth
   proxy_user = "dimajix"
@@ -56,9 +56,9 @@ module "emr" {
 
 module route53 {
   source = "./route53"
-  tags   = "${var.common_tags}"
-  names = ["${module.emr.names}"]
-  targets = ["${module.emr.master_public_dns}"]
+  tags   = var.common_tags
+  names = module.emr.names
+  targets = module.emr.master_public_dns
 
   # Configuration: Set the Route53 zone to use
   zone_name = "training.dimajix-aws.net"

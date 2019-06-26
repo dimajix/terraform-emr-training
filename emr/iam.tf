@@ -17,11 +17,12 @@ resource "aws_iam_role" "training_emr_service_role" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "training_emr_service_policy" {
   name = "training_emr_service_policy"
-  role = "${aws_iam_role.training_emr_service_role.id}"
+  role = aws_iam_role.training_emr_service_role.id
 
   policy = <<EOF
 {
@@ -105,13 +106,14 @@ resource "aws_iam_role_policy" "training_emr_service_policy" {
     }]
 }
 EOF
+
 }
 
 # IAM Role for EC2 Instance Profile
 resource "aws_iam_role" "training_ec2_role" {
-  name = "training_ec2_role"
+name = "training_ec2_role"
 
-  assume_role_policy = <<EOF
+assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
   "Statement": [
@@ -126,18 +128,19 @@ resource "aws_iam_role" "training_ec2_role" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_instance_profile" "training_ec2_profile" {
-  name = "training_ec2_profile"
-  role = "${aws_iam_role.training_ec2_role.name}"
+name = "training_ec2_profile"
+role = aws_iam_role.training_ec2_role.name
 }
 
 resource "aws_iam_role_policy" "training_ec2_policy" {
-  name = "training_ec2_policy"
-  role = "${aws_iam_role.training_ec2_role.id}"
+name = "training_ec2_policy"
+role = aws_iam_role.training_ec2_role.id
 
-  policy = <<EOF
+policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [{
@@ -185,5 +188,6 @@ resource "aws_iam_role_policy" "training_ec2_policy" {
     }]
 }
 EOF
+
 }
 

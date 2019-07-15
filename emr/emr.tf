@@ -14,7 +14,7 @@ resource "aws_emr_cluster" "cluster" {
     instance_profile = aws_iam_instance_profile.training_ec2_profile.arn
   }
 
-  ebs_root_volume_size = "12"
+  ebs_root_volume_size = "16"
 
   master_instance_group {
     instance_type = var.master_type

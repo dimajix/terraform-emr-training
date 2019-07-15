@@ -32,7 +32,8 @@ install_anaconda() {
     sudo sh ${ANACONDA_INSTALLER} -f -b -p ${ANACONDA_PREFIX}
     sudo rm -f ${ANACONDA_INSTALLER}
 
-    sudo ${ANACONDA_PREFIX}/bin/conda install --yes pyarrow
+    sudo ${ANACONDA_PREFIX}/bin/conda install --yes pyarrow s3fs python=3.6
+
 }
 
 

@@ -8,10 +8,13 @@ variable "common_tags" {
 
 
 module "vpc" {
-  source = "./vpc"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "2.6.0"
+
   name  = "training-vpc"
   tags  = var.common_tags
 
+  azs = var.aws_availability_zones
   cidr = "10.200.0.0/16"
   private_subnets = ["10.200.1.0/24"]
   public_subnets  = ["10.200.101.0/24"]
@@ -19,7 +22,6 @@ module "vpc" {
   enable_s3_endpoint = "true"
   enable_dns_hostnames = "true"
   enable_dns_support = "true"
-  azs      = var.aws_availability_zones
 }
 
 
@@ -30,9 +32,9 @@ module "emr" {
   # Configuration: Set the Route53 zone name
   proxy_domain = "training.dimajix-aws.net"
   # Configuration: Set the cluster names
-  names = ["cl1","cl2","cl3","cl4","cl5","cl6"]
+  names = ["cl1","cl2","cl3","cl4","cl5","cl6","cl7"]
   # Configuration: Set the desired EMR release
-  release = "emr-5.23.0"
+  release = "emr-5.29.0"
   # Configuration: Set the desired EMR components
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
   # Configuration: Set the desired EC2 instance type for the master
@@ -54,7 +56,7 @@ module "emr" {
 }
 
 
-module route53 {
+module "route53" {
   source = "./route53"
   tags   = var.common_tags
   names = module.emr.names

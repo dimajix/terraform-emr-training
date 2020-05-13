@@ -1,6 +1,8 @@
-variable "name" {}
+variable "name" {
+}
 
-variable "cidr" {}
+variable "cidr" {
+}
 
 variable "public_subnets" {
   description = "A list of public subnets inside the VPC."
@@ -56,3 +58,4 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   default     = {}
 }
+

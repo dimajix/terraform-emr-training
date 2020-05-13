@@ -63,7 +63,7 @@ resource "aws_emr_cluster" "cluster" {
     name = "install-kafka"
   }
   bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/install-jupyter-5.2.0.sh"
+    path = "s3://dimajix-training/scripts/aws/install-jupyter-2019.03.sh"
     name = "install-jupyter"
   }
   bootstrap_action {

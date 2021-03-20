@@ -18,18 +18,27 @@ resource "aws_instance" "proxy" {
     host     = self.public_ip
     type     = "ssh"
     user     = "ubuntu"
-    private_key = var.ssh_key_file
+    private_key = var.ssh_key
   }
   provisioner "file" {
-    source      = "provisioner"
+    source      = "proxy/provisioner"
     destination = "/home/ubuntu"
   }
-  #provisioner "remote-exec" {
-  #  inline = [
-  #    "chmod +x /home/ubuntu/provisioner",
-  #    "/home/ubuntu/ec2-provision.sh ${var.aws_region} ${module.eks.cluster_id} ${join(",",var.cluster_users)}"
-  #  ]
-  #}
+  provisioner "file" {
+    source      = var.ssl_certfile
+    destination = "/home/ubuntu/cert.pem"
+  }
+  provisioner "file" {
+    source      = var.ssl_keyfile
+    destination = "/home/ubuntu/privkey.pem"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/provisioner",
+      "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/cert.pem -K /home/ubuntu/privkey.pem --hosts ${join(",",var.targets)} --names ${join(",",var.names)}"
+    ]
+  }
 
   tags = merge( { "Name" = "training-emr-proxy" }, var.tags )
 }
@@ -54,7 +63,6 @@ resource "aws_iam_role" "proxy" {
   ]
 }
 EOF
-
 }
 
 resource "aws_iam_instance_profile" "proxy" {

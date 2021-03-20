@@ -14,7 +14,7 @@ resource "aws_key_pair" "deployer" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.68.0"
+  version = "2.77.0"
 
   name  = "training-vpc"
   tags  = var.common_tags
@@ -30,37 +30,12 @@ module "vpc" {
 }
 
 
-module "emr" {
-  source = "./emr"
-  tags   = var.common_tags
-
-  # Configuration: Set the cluster names
-  #names = ["cl1","cl2","cl3","cl4","cl5","cl6","cl7"]
-  names = ["kku"]
-  # Configuration: Set the desired EMR release
-  release = "emr-6.2.0"
-  # Configuration: Set the desired EMR components
-  applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
-  # Configuration: Set the desired EC2 instance type for the master
-  master_type = "m4.xlarge"
-  master_ebs_size = "40"
-  # Configuration: Set the desired EC2 instance type for the workers
-  worker_type = "m4.2xlarge"
-  worker_ebs_size = "40"
-  worker_count = 1
-
-  vpc_id = module.vpc.vpc_id
-  subnet_id = module.vpc.public_subnets[0]
-  edge_security_group_id = module.proxy.security_group_id
-  ssh_key_ids = [aws_key_pair.deployer.id]
-}
-
 
 module "proxy" {
   source = "./proxy"
   tags   = var.common_tags
-  names = module.emr.names
-  targets = module.emr.master_public_dns    
+  names = ["kku", "cl1"] # module.emr.names
+  targets = ["dimajix.de", "dimajix.de"] #module.emr.master_public_dns
 
   # Configure the domain
   proxy_domain = "training.dimajix-aws.net"  
@@ -72,17 +47,18 @@ module "proxy" {
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.public_subnets[0]
   ssh_key_id = aws_key_pair.deployer.id
-  ssh_key_file = file("deployer-key.pub")
+  ssh_key = file("deployer-key")
+  ssl_certfile = "ssl.cert"
+  ssl_keyfile = "ssl.key"
 }
 
 
 module "route53" {
   source = "./route53"
   tags   = var.common_tags
-  names = module.emr.names
+  names = ["kku", "cl1"] # module.emr.names
   targets = [module.proxy.public_dns]
 
   # Configuration: Set the Route53 zone to use
   zone_name = "training.dimajix-aws.net"
 }
-

@@ -45,7 +45,8 @@
     SSLCompression off
     SSLProtocol all -SSLv2 -SSLv3
     SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
-    SSLCertificateFile /etc/httpd/ssl/nn.{{aliasHostName}}.cert
+    SSLCertificateFile /etc/apache2/ssl/nn.{{aliasHostName}}.cert
+    SSLCertificateKeyFile /etc/apache2/ssl/nn.{{aliasHostName}}.key
 
     RemoteIPHeader X-Forwarded-For
     RequestHeader set X-Forwarded-Proto 'https'

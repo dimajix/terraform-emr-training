@@ -6,17 +6,14 @@ variable "targets" {
   type = list(string)
 }
 
-variable "vpc_id" {
-}
+variable "vpc_id" {}
+variable "subnet_id" {}
 
-variable "subnet_id" {
-}
+variable "ssh_key_id" {}
+variable "ssh_key" {}
 
-variable "ssh_key_id" {
-}
-
-variable "ssh_key_file" {
-}
+variable "ssl_certfile" {}
+variable "ssl_keyfile" {}
 
 variable "proxy_domain" {
   default = "training.dimajix-aws.net"

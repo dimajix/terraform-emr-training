@@ -28,7 +28,7 @@ ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
 <VirtualHost *:80>
     ServerName {{aliasHostName}}
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/html
+    DocumentRoot /var/www/html/{{aliasHostName}}
 
      <Location />
         AuthType Basic
@@ -43,13 +43,14 @@ ProxyHTMLEvents	onclick ondblclick onmousedown onmouseup \
 <VirtualHost *:443>
     ServerName {{aliasHostName}}
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/html
+    DocumentRoot /var/www/html/{{aliasHostName}}
 
     SSLEngine On
     SSLCompression off
     SSLProtocol all -SSLv2 -SSLv3
     SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
-    SSLCertificateFile /etc/httpd/ssl/{{aliasHostName}}.cert
+    SSLCertificateFile /etc/apache2/ssl/{{aliasHostName}}.cert
+    SSLCertificateKeyFile /etc/apache2/ssl/{{aliasHostName}}.key
 
      <Location />
         AuthType Basic

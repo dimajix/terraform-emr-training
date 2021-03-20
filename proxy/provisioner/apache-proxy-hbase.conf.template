@@ -1,17 +1,15 @@
 <VirtualHost *:80>
-    ServerName nn.{{aliasHostName}}
+    ServerName hbase.{{aliasHostName}}
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html
 
     RemoteIPHeader X-Forwarded-For
     RequestHeader set X-Forwarded-Proto 'http'
-    RequestHeader set X-Forwarded-Host 'nn.{{aliasHostName}}:80'
-    RequestHeader set X-Forwarded-Server 'nn.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Host 'hbase.{{aliasHostName}}:80'
+    RequestHeader set X-Forwarded-Server 'hbase.{{aliasHostName}}'
     RequestHeader set X-Forwarded-Port "80"
 
     RewriteEngine On
-    RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
-    # RewriteRule ^/(.*) ws://azerty01:31321/$1 [P]
 
     ProxyVia Off
     ProxyRequests off
@@ -21,23 +19,24 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-	ProxyHTMLURLMap http://{{master.masterHostName}}:50070/ /
-	<Location />
+    ProxyHTMLURLMap http://{{target_master}}:16010/ /
+    <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
         AuthBasicProvider file
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-    	ProxyPass http://{{master.masterHostName}}:50070/
+	    ProxyPass http://{{target_master}}:16010/
         ProxyPassReverse /
-        RequestHeader   unset   Accept-Encoding
-	</Location>
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
 </VirtualHost>
 
 
 <VirtualHost *:443>
-    ServerName nn.{{aliasHostName}}
+    ServerName hbase.{{aliasHostName}}
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html
 
@@ -45,17 +44,16 @@
     SSLCompression off
     SSLProtocol all -SSLv2 -SSLv3
     SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
-    SSLCertificateFile /etc/httpd/ssl/nn.{{aliasHostName}}.cert
+    SSLCertificateFile /etc/httpd/ssl/hbase.{{aliasHostName}}.cert
 
     RemoteIPHeader X-Forwarded-For
     RequestHeader set X-Forwarded-Proto 'https'
-    RequestHeader set X-Forwarded-Host 'nn.{{aliasHostName}}:443'
-    RequestHeader set X-Forwarded-Server 'nn.{{aliasHostName}}'
-    RequestHeader set X-Forwarded-Port "443"
+    RequestHeader set X-Forwarded-Host 'hbase.{{aliasHostName}}:443'
+    RequestHeader set X-Forwarded-Server 'hbase.{{aliasHostName}}'
+    RequestHeader set X-Forwarded-Port '443'
 
     RewriteEngine On
-    RewriteCond %{HTTP:Upgrade} =WebSocket [NC,NV]
-    # RewriteRule ^/(.*) ws://azerty01:31321/$1 [P]
+
     ProxyVia Off
     ProxyRequests off
     ProxyPreserveHost On
@@ -64,17 +62,18 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-	ProxyHTMLURLMap http://{{master.masterHostName}}:50070/ /
-	<Location />
+    ProxyHTMLURLMap http://{{target_master}}:16010/ /
+    <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
         AuthBasicProvider file
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-    	ProxyPass http://{{master.masterHostName}}:50070/
+	    ProxyPass http://{{target_master}}:16010/
         ProxyPassReverse /
-        RequestHeader   unset   Accept-Encoding
-	</Location>
+        # RequestHeader   unset   Accept-Encoding
+        # SetEnv proxy-nokeepalive 1
+    </Location>
 </VirtualHost>
 

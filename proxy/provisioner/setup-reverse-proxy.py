@@ -1,4 +1,4 @@
-import urllib2
+import requests
 import socket
 import json
 import pystache
@@ -15,28 +15,15 @@ curdir = os.path.abspath(os.path.dirname(__file__))
 HTTPD_CONF_DIR = '/etc/httpd/conf.d'
 CERT_DIR = '/etc/httpd/ssl'
 
-def wait_hadoop():
-    hostname = socket.getfqdn()
-    response = None
 
-    while not response:
-        try:
-            response = urllib2.urlopen("http://" + hostname + ":8088/ws/v1/cluster/nodes")
-        except:
-            time.sleep(1)
-
-
-def create_env(args):
-    hostname = socket.getfqdn()
-    response = urllib2.urlopen("http://" + hostname + ":8088/ws/v1/cluster/nodes")
-        
-    env = json.loads(response.read())
-    env['master'] = {'masterHostName':hostname}
-    env['aliasHostName'] = args.domain
-    env['username'] = args.username
-    env['password'] = args.password
-    env['htpasswd'] = os.path.join(curdir, 'htpasswd')
-    return env
+def create_env(args, target_domain, master_host):
+    return {
+        'target_master': master_host,
+        'aliasHostName': target_domain,
+        'username': args.username,
+        'password': args.password,
+        'htpasswd': os.path.join(curdir, 'htpasswd')
+    }
 
 
 def render_template(template, target, env):
@@ -84,8 +71,7 @@ def create_certificate(hostname):
             f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
 
 
-def setup_apache(args):
-    env = create_env(args)
+def setup_single_cluster(env):
     render_template('index.html.template', '/var/www/html/index.html', env)
     render_httpd_template('apache-proxy.conf.template', env)
     render_httpd_template('apache-proxy-nn.conf.template', env)
@@ -97,15 +83,17 @@ def setup_apache(args):
     render_httpd_template('apache-proxy-jupyter.conf.template', env)
 
     hostname = env['aliasHostName']
-    create_certificate(hostname)
-    create_certificate('nn.' + hostname)
-    create_certificate('ap.' + hostname)
-    create_certificate('rm.' + hostname)
-    create_certificate('hue.' + hostname)
-    create_certificate('hbase.' + hostname)
-    create_certificate('zeppelin.' + hostname)
-    create_certificate('jupyter.' + hostname)
+    #create_certificate(hostname)
+    #create_certificate('nn.' + hostname)
+    #create_certificate('ap.' + hostname)
+    #create_certificate('rm.' + hostname)
+    #create_certificate('hue.' + hostname)
+    #create_certificate('hbase.' + hostname)
+    #create_certificate('zeppelin.' + hostname)
+    #create_certificate('jupyter.' + hostname)
 
+
+def setup_htpasswd(env):
     with open(env["htpasswd"],'wt') as userdb:
         pass
     with htpasswd.Basic(env["htpasswd"]) as userdb:
@@ -117,12 +105,16 @@ def parse_args(raw_args):
     parser.add_argument('-d', '--domain', dest='domain', help='Domain for registering proxy host', default='training.dimajix-aws.net')
     parser.add_argument('-u', '--username', dest='username', help='Username for authentication', default='dimajix-training')
     parser.add_argument('-p', '--password', dest='password', help='Password for authentication', default='dmx2018')
+    parser.add_argument('-p', '--password', dest='password', help='Password for authentication', default='dmx2018')
 
     return parser.parse_args(args=raw_args)
 
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
-    wait_hadoop()
-    setup_apache(args)
+
+    for hostname,target in zip(args.hostnames, args.targets):
+        target_domain = target + "." + args.domain
+        env = create_env(args, hostname, target_domain)
+        setup_single_cluster(env)
 

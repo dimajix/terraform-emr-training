@@ -9,14 +9,6 @@ resource "aws_route53_record" "top" {
   name    = element(var.names, count.index)
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -26,14 +18,6 @@ resource "aws_route53_record" "rm" {
   name    = "rm.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -43,14 +27,6 @@ resource "aws_route53_record" "nn" {
   name    = "nn.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -60,14 +36,6 @@ resource "aws_route53_record" "ap" {
   name    = "ap.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -77,14 +45,6 @@ resource "aws_route53_record" "zeppelin" {
   name    = "zeppelin.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -94,14 +54,6 @@ resource "aws_route53_record" "jupyter" {
   name    = "jupyter.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -111,14 +63,6 @@ resource "aws_route53_record" "hue" {
   name    = "hue.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 
@@ -128,14 +72,6 @@ resource "aws_route53_record" "hbase" {
   name    = "hbase.${element(var.names, count.index)}"
   type    = "CNAME"
   ttl     = "300"
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = [element(var.targets, count.index)]
 }
 

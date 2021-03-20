@@ -1,4 +1,5 @@
-[{
+[
+{
   "Classification": "hue-ini",
   "Properties": {},
   "Configurations": [
@@ -48,5 +49,12 @@
       ]
     }
   ]
-}]
+},
+{
+  "Classification": "spark-defaults",
+  "Properties": {
+    "spark.jars.packages":"mysql:mysql-connector-java:6.0.6,org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.4"
+  }
+}
+]
 

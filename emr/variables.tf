@@ -32,7 +32,7 @@ variable "master_ebs_size" {
 }
 
 variable "release" {
-  default = "emr-5.24.0"
+  default = "emr-6.2.0"
 }
 
 variable "applications" {
@@ -43,26 +43,15 @@ variable "applications" {
 variable "vpc_id" {
 }
 
-variable "subnet_ids" {
-  type = list(string)
-  default = []
+variable "subnet_id" {
+}
+
+variable "edge_security_group_id" {
 }
 
 variable "ssh_key_ids" {
   type = list(string)
   default = []
-}
-
-variable "proxy_domain" {
-  default = "training.dimajix-aws.net"
-}
-
-variable "proxy_user" {
-  default = "user"
-}
-
-variable "proxy_password" {
-  default = "password"
 }
 
 variable "tags" {

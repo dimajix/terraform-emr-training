@@ -3,7 +3,7 @@
 AWS_INFO_DIR="/mnt/var/lib/info/"
 
 ANACONDA_PREFIX=/opt/anaconda3
-ANACONDA_VERSION=5.2.0
+ANACONDA_VERSION=2020.11
 ANACONDA_INSTALLER=Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh
 ANACONDA_USER=hadoop
 ANACONDA_USER_HOME=$(eval echo ~${ANACONDA_USER})
@@ -32,8 +32,8 @@ install_anaconda() {
     sudo sh ${ANACONDA_INSTALLER} -f -b -p ${ANACONDA_PREFIX}
     sudo rm -f ${ANACONDA_INSTALLER}
 
-    sudo ${ANACONDA_PREFIX}/bin/conda install --yes pyarrow s3fs python=3.6
-
+    sudo ${ANACONDA_PREFIX}/bin/conda install --yes python=3.7 pyarrow s3fs geopandas cartopy
+    sudo ${ANACONDA_PREFIX}/bin/pip install contextily
 }
 
 

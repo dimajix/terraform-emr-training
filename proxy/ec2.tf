@@ -25,18 +25,14 @@ resource "aws_instance" "proxy" {
     destination = "/home/ubuntu"
   }
   provisioner "file" {
-    source      = var.ssl_certfile
-    destination = "/home/ubuntu/cert.pem"
-  }
-  provisioner "file" {
-    source      = var.ssl_keyfile
-    destination = "/home/ubuntu/privkey.pem"
+    source      = var.ssl_certs
+    destination = "/home/ubuntu/certs/"
   }
 
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/provisioner",
-      "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/cert.pem -K /home/ubuntu/privkey.pem --hosts ${join(",",var.targets)} --names ${join(",",var.names)}"
+      "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/certs --hosts ${join(",",var.targets)} --names ${join(",",var.names)}"
     ]
   }
 

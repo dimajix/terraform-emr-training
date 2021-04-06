@@ -12,8 +12,7 @@ variable "subnet_id" {}
 variable "ssh_key_id" {}
 variable "ssh_key" {}
 
-variable "ssl_certfile" {}
-variable "ssl_keyfile" {}
+variable "ssl_certs" {}
 
 variable "proxy_domain" {
   default = "training.dimajix-aws.net"

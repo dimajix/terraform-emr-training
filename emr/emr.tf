@@ -67,4 +67,3 @@ resource "aws_emr_cluster" "cluster" {
   #  name = "install-jupyter"
   #}
 }
-

@@ -15,13 +15,22 @@ HTTPD_CONF_DIR = '/etc/apache2'
 CERT_DIR = '/etc/apache2/ssl'
 
 
+def ensure_directory(dirname):
+    if not os.path.exists(dirname):
+        os.makedirs(dirname, 755)
+
+
+def ensure_parentdir(filename):
+    dirname = os.path.dirname(filename)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname, 755)
+
+
 def render_template(template, target, env):
     index_template = open(os.path.join(curdir, template)).read()
     index_html = pystache.render(index_template, env)
     print(f"Generating {template} -> {target}")
-    dirname = os.path.dirname(target)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname, 755)
+    ensure_parentdir(target)
     with open(target, 'wt') as f:
         f.write(index_html)
     os.chmod(target, 644)
@@ -59,8 +68,7 @@ def create_certificate(hostname):
     cert.set_pubkey(k)
     cert.sign(k, 'sha1')
 
-    if not os.path.exists(CERT_DIR):
-        os.makedirs(CERT_DIR)
+    ensure_directory(CERT_DIR)
 
     certfile = os.path.join(CERT_DIR, hostname + '.cert')
     if not os.path.exists(certfile):
@@ -71,8 +79,7 @@ def create_certificate(hostname):
 
 def link_certificate(hostname, keyfile, certfile):
     print(f"Linking {certfile} -> {os.path.join(CERT_DIR, hostname + '.cert')}")
-    if not os.path.exists(CERT_DIR):
-        os.makedirs(CERT_DIR, 755)
+    ensure_directory(CERT_DIR)
     os.symlink(certfile, os.path.join(CERT_DIR, hostname + ".cert"))
     os.symlink(keyfile, os.path.join(CERT_DIR, hostname + ".key"))
 
@@ -94,9 +101,13 @@ def setup_single_cluster(env):
     render_httpd_template('apache-proxy-zeppelin.conf.template', env)
     render_httpd_template('apache-proxy-jupyter.conf.template', env)
 
-    keyfile = env['ssl_keyfile']
-    certfile = env['ssl_certfile']
+    certdir = env['ssl_certdir']
+    keyfile = os.path.join(certdir, "root-privkey.pem")
+    certfile = os.path.join(certdir, "root-cert.pem")
     link_certificate(aliasName, keyfile, certfile)
+
+    keyfile = os.path.join(certdir, env['name'] + "-privkey.pem")
+    certfile = os.path.join(certdir, env['name'] + "-cert.pem")
     link_certificate('nn.' + aliasName, keyfile, certfile)
     link_certificate('ap.' + aliasName, keyfile, certfile)
     link_certificate('rm.' + aliasName, keyfile, certfile)
@@ -116,6 +127,7 @@ def setup_single_cluster(env):
 
 
 def setup_htpasswd(filename, env):
+    ensure_parentdir(filename)
     with open(filename, 'wt') as userdb:
         pass
     os.chmod(filename, 644)
@@ -130,8 +142,7 @@ def parse_args(raw_args):
     parser.add_argument('-p', '--password', dest='password', help='Password for authentication', default='dmx2018')
     parser.add_argument('-N', '--names', dest='names', help='Nice names to create proxies for', default='kku')
     parser.add_argument('-H', '--hosts', dest='hosts', help='Target machines to proxy', default='')
-    parser.add_argument('-C', '--ssl-certfile', dest='certfile', help='SSL certificate file', default='/etc/httpd/ssl/dummy.cert')
-    parser.add_argument('-K', '--ssl-keyfile', dest='keyfile', help='SSL private key file', default='/etc/httpd/ssl/dummy.key')
+    parser.add_argument('-C', '--ssl-certdir', dest='certdir', help='SSL certificate directory', default='')
 
     return parser.parse_args(args=raw_args)
 
@@ -146,16 +157,11 @@ if __name__ == "__main__":
         alias_domain = alias + "." + args.domain
         env = {
             'target_master': hostname,
+            'name': alias,
             'aliasHostName': alias_domain,
             'username': args.username,
             'password': args.password,
-            'ssl_certfile': args.certfile,
-            'ssl_keyfile': args.keyfile
+            'ssl_certdir': args.certdir
         }
 
         setup_single_cluster(env)
-
-
-# TODO
-#  * htpasswd
-#  * file permissions

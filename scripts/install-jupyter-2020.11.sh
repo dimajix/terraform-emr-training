@@ -32,8 +32,11 @@ install_anaconda() {
     sudo sh ${ANACONDA_INSTALLER} -f -b -p ${ANACONDA_PREFIX}
     sudo rm -f ${ANACONDA_INSTALLER}
 
-    sudo ${ANACONDA_PREFIX}/bin/conda install --yes python=3.7 pyarrow s3fs geopandas cartopy
-    sudo ${ANACONDA_PREFIX}/bin/pip install contextily
+    # Update some components, otherwise PyArrow cannot be installed
+    sudo ${ANACONDA_PREFIX}/bin/conda update --yes --freeze anaconda lz4-c openssl
+    # Install as much as possible via Anaconda
+    sudo ${ANACONDA_PREFIX}/bin/conda install --yes --freeze python=3.8 pyarrow=2.0.0 s3fs=0.5.2 cartopy=0.18.0
+    sudo ${ANACONDA_PREFIX}/bin/pip install contextily geopandas
 }
 
 
@@ -53,7 +56,7 @@ install_pyspark_kernel() {
     sudo mkdir -p ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3
     sudo tee ${ANACONDA_PREFIX}/share/jupyter/kernels/PySpark3/kernel.json >/dev/null <<EOL
 {
- "display_name": "PySpark 2.4 (Python 3)",
+ "display_name": "PySpark",
  "language": "python",
  "argv": [
   "${ANACONDA_PREFIX}/bin/python3",
@@ -75,90 +78,25 @@ EOL
 
 
 install_startup() {
-    sudo tee /etc/init/jupyter-notebook-server.conf > /dev/null <<EOL
-description "Jupyter Notebook Server"
+    sudo tee /etc/systemd/syste/jupyter-notebook.conf > /dev/null <<EOL
+[Unit]
+Description=Jupyter Notebook
 
-start on runlevel [2345]
-stop on runlevel [016]
+[Service]
+Environment=JAVA_HOME=/etc/alternatives/jre
+Type=exec
+ExecStart=/usr/bin/su -s /bin/bash hadoop -c "cd ${ANACONDA_USER_HOME} && ${ANACONDA_PREFIX}/bin/jupyter-notebook --NotebookApp.ip=0.0.0.0 --NotebookApp.port=8899"
+Restart=always
+RestartSec=5
+PIDFile=/var/run/jupyter-notebook.pid
 
-start on started netfs
-start on started rsyslog
 
-stop on stopping netfs
-stop on stopping rsyslog
-
-respawn
-
-# respawn unlimited times with 5 seconds time interval
-respawn limit 0 5
-
-env SLEEP_TIME=10
-
-env DAEMON="jupyter-notebook-server"
-env DESC="Jupyter Notebook Server"
-env EXEC_PATH="${ANACONDA_PREFIX}/bin/jupyter-notebook"
-env SVC_USER="${ANACONDA_USER}"
-env DAEMON_FLAGS="--NotebookApp.ip=0.0.0.0 --NotebookApp.port=8899"
-env PIDFILE="/var/run/jupyter/\${DAEMON}.pid"
-env LOGFILE="/var/log/jupyter/\${DAEMON}.out"
-env WORKING_DIR="/home/hadoop"
-
-pre-start script
-  install -d -m 0755 -o \$SVC_USER -g \$SVC_USER \$(dirname \$PIDFILE) 1>/dev/null 2>&1 || :
-  install -d -m 0755 -o \$SVC_USER -g \$SVC_USER \$(dirname \$LOGFILE) 1>/dev/null 2>&1 || :
-
-  if [ ! -x \$EXEC_PATH ]; then
-    echo "\$EXEC_PATH is not an executable"
-    exit 1
-  fi
-
-  run_prestart() {
-      cd \${WORKING_DIR}
-      su -s /bin/bash \$SVC_USER -c "nohup nice -n 0 \
-          \${EXEC_PATH} \$DAEMON_FLAGS \
-          > \$LOGFILE 2>&1 & "'echo \$!' > "\$PIDFILE"
-  }
-
-  export -f run_prestart
-  $EXEC_LAUNCHER run_prestart
-end script
-
-script
-
-  # sleep for sometime for the daemon to start running
-  sleep \$SLEEP_TIME
-  if [ ! -f \$PIDFILE ]; then
-    echo "\$PIDFILE not found"
-    exit 1
-  fi
-  pid=\$(<"\$PIDFILE")
-  while ps -p \$pid > /dev/null; do
-    sleep \$SLEEP_TIME
-  done
-  echo "\$pid stopped running..."
-
-end script
-
-pre-stop script
-
- # do nothing
-
-end script
-
-post-stop script
-  if [ ! -f \$PIDFILE ]; then
-    echo "\$PIDFILE not found"
-    exit
-  fi
-  pid=\$(<"\$PIDFILE")
-  if kill \$pid > /dev/null 2>&1; then
-    echo "process \$pid is killed"
-  fi
-  rm -rf \$PIDFILE
-end script
+[Install]
+WantedBy=multi-user.target
 EOL
 
-    sudo initctl start jupyter-notebook-server
+    sudo systemctl daemon-reload
+    sudo systemctl start jupyter-notebook
 }
 
 

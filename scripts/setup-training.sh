@@ -15,7 +15,7 @@ exec_mysql() {
 
 
 install_training_repo() {
-    sudo yum -y install git python27-boto3
+    sudo yum -y install git
 
     git clone https://github.com/dimajix/spark-training.git /home/hadoop/spark-training
     chown hadoop:hadoop /home/hadoop/spark-training
@@ -37,10 +37,10 @@ install_training_repo() {
 
 
 create_mysql_database() {
-    sudo yum -y install mysql-server
-    sudo /etc/init.d/mysqld start
+    sudo yum -y install mariadb
+    sudo systemctl start mariadb
 
-    exec_mysql "CREATE DATABASE training;"
+    exec_mysql "CREATE DATABASE IF NOT EXISTS training;"
     exec_mysql "GRANT ALL ON TABLE training.* TO 'user'@'%' IDENTIFIED BY 'user'; FLUSH PRIVILEGES;"
     exec_mysql "GRANT ALL ON TABLE training.* TO 'user'@'localhost' IDENTIFIED BY 'user'; FLUSH PRIVILEGES;"
 }

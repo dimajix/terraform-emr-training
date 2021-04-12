@@ -141,7 +141,8 @@ def parse_args(raw_args):
     parser.add_argument('-u', '--username', dest='username', help='Username for authentication', default='dimajix-training')
     parser.add_argument('-p', '--password', dest='password', help='Password for authentication', default='dmx2018')
     parser.add_argument('-N', '--names', dest='names', help='Nice names to create proxies for', default='kku')
-    parser.add_argument('-H', '--hosts', dest='hosts', help='Target machines to proxy', default='')
+    parser.add_argument('--pubic-masters', dest='public_masters', help='Target machines to proxy', default='')
+    parser.add_argument('--private-masters', dest='private_masters', help='Target machines to proxy', default='')
     parser.add_argument('-C', '--ssl-certdir', dest='certdir', help='SSL certificate directory', default='')
 
     return parser.parse_args(args=raw_args)
@@ -150,13 +151,15 @@ def parse_args(raw_args):
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
 
-    hostnames = args.hosts.split(",")
+    public_masters = args.public_masters.split(",")
+    private_masters = args.private_masters.split(",")
     alias_names = args.names.split(",")
 
-    for hostname, alias in zip(hostnames, alias_names):
+    for public_master, private_master, alias in zip(public_masters, private_masters, alias_names):
         alias_domain = alias + "." + args.domain
         env = {
-            'target_master': hostname,
+            'public_master': public_master,
+            'private_master': private_master,
             'name': alias,
             'aliasHostName': alias_domain,
             'username': args.username,

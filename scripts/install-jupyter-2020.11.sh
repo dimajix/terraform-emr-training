@@ -78,7 +78,7 @@ EOL
 
 
 install_startup() {
-    sudo tee /etc/systemd/syste/jupyter-notebook.conf > /dev/null <<EOL
+    sudo tee /etc/systemd/system/jupyter-notebook.service > /dev/null <<EOL
 [Unit]
 Description=Jupyter Notebook
 

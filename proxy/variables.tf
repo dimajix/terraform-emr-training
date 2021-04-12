@@ -2,7 +2,10 @@ variable "names" {
   type = list(string)
 }
 
-variable "targets" {
+variable "public_masters" {
+  type = list(string)
+}
+variable "private_masters" {
   type = list(string)
 }
 

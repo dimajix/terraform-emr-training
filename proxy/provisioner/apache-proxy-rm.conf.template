@@ -19,8 +19,10 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:20888 http://ap.{{aliasHostName}}
-    ProxyHTMLURLMap http://{{target_master}}:8088/ /
+    ProxyHTMLURLMap http://{{public_master}}:20888 http://ap.{{aliasHostName}}
+    ProxyHTMLURLMap http://{{public_master}}:8088/ /
+    ProxyHTMLURLMap http://{{private_master}}:20888 http://ap.{{aliasHostName}}
+    ProxyHTMLURLMap http://{{private_master}}:8088/ /
 	<Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -28,9 +30,10 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-        ProxyPass http://{{target_master}}:8088/
+        ProxyPass http://{{private_master}}:8088/
         ProxyPassReverse /
         Header unset X-Content-Type-Options
+        RequestHeader unset Accept-Encoding
 	</Location>
 </VirtualHost>
 
@@ -63,8 +66,10 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:20888 http://ap.{{aliasHostName}}
-    ProxyHTMLURLMap http://{{target_master}}:8088/ /
+    ProxyHTMLURLMap http://{{public_master}}:20888 https://ap.{{aliasHostName}}
+    ProxyHTMLURLMap http://{{public_master}}:8088/ /
+    ProxyHTMLURLMap http://{{private_master}}:20888 https://ap.{{aliasHostName}}
+    ProxyHTMLURLMap http://{{private_master}}:8088/ /
 	<Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -72,9 +77,10 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-        ProxyPass http://{{target_master}}:8088/
+        ProxyPass http://{{private_master}}:8088/
         ProxyPassReverse /
         Header unset X-Content-Type-Options
+        RequestHeader unset Accept-Encoding
 	</Location>
 </VirtualHost>
 

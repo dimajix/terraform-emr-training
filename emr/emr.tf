@@ -62,8 +62,16 @@ resource "aws_emr_cluster" "cluster" {
   #  path = "s3://dimajix-training/scripts/aws/install-kafka.sh"
   #  name = "install-kafka"
   #}
-  #bootstrap_action {
-  #  path = "s3://dimajix-training/scripts/aws/install-jupyter-2020.11.sh"
-  #  name = "install-jupyter"
-  #}
+  bootstrap_action {
+    path = "s3://dimajix-training/scripts/aws/install-jupyter-2020.11.sh"
+    name = "install-jupyter"
+  }
+}
+
+
+data "aws_instance" "cluster" {
+  filter {
+    name   = "dns-name"
+    values = aws_emr_cluster.cluster.*.master_public_dns
+  }
 }

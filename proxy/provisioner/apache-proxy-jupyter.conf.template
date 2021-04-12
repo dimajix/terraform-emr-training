@@ -23,7 +23,8 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:8899/ /
+    ProxyHTMLURLMap http://{{public_master}}:8899/ /
+    ProxyHTMLURLMap http://{{private_master}}:8899/ /
     <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -31,18 +32,18 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-	    ProxyPass http://{{target_master}}:8899/
+	    ProxyPass http://{{private_master}}:8899/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
     </Location>
     <Location /api/kernels/>
-        ProxyPass ws://{{target_master}}:8899/api/kernels/
-        ProxyPassReverse ws://{{target_master}}:8899/api/kernels/
+        ProxyPass ws://{{private_master}}:8899/api/kernels/
+        ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
-        ProxyPass ws://{{target_master}}:8899/terminals/websocket/
-        ProxyPassReverse ws://{{target_master}}:8899/terminals/websocket/
+        ProxyPass ws://{{private_master}}:8899/terminals/websocket/
+        ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>
 </VirtualHost>
 
@@ -57,7 +58,7 @@
     SSLProtocol all -SSLv2 -SSLv3
     SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-SHA
     SSLCertificateFile /etc/apache2/ssl/jupyter.{{aliasHostName}}.cert
-     SSLCertificateKeyFile /etc/apache2/ssl/jupyter.{{aliasHostName}}.key
+    SSLCertificateKeyFile /etc/apache2/ssl/jupyter.{{aliasHostName}}.key
 
     RemoteIPHeader X-Forwarded-For
     RequestHeader set X-Forwarded-Proto 'https'
@@ -79,7 +80,8 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:8899/ /
+    ProxyHTMLURLMap http://{{public_master}}:8899/ /
+    ProxyHTMLURLMap http://{{private_master}}:8899/ /
     <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -87,18 +89,18 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-            ProxyPass http://{{target_master}}:8899/
+            ProxyPass http://{{private_master}}:8899/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
     </Location>
     <Location /api/kernels/>
-        ProxyPass ws://{{target_master}}:8899/api/kernels/
-        ProxyPassReverse ws://{{target_master}}:8899/api/kernels/
+        ProxyPass ws://{{private_master}}:8899/api/kernels/
+        ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
-        ProxyPass ws://{{target_master}}:8899/terminals/websocket/
-        ProxyPassReverse ws://{{target_master}}:8899/terminals/websocket/
+        ProxyPass ws://{{private_master}}:8899/terminals/websocket/
+        ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>
 </VirtualHost>
 

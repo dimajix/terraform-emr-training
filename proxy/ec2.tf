@@ -32,7 +32,7 @@ resource "aws_instance" "proxy" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/provisioner",
-      "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/certs --hosts ${join(",",var.targets)} --names ${join(",",var.names)}"
+      "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/certs --pubic-masters ${join(",",var.public_masters)} --private-masters ${join(",",var.private_masters)} --names ${join(",",var.names)}"
     ]
   }
 

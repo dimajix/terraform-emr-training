@@ -8,7 +8,7 @@ install_reverse_proxy() {
     sudo pip3 install htpasswd
 
     sudo python3 $basedir/setup-reverse-proxy.py "$@"
-    sudo a2enmod ssl headers request remoteip rewrite proxy proxy_html proxy_http proxy_wstunnel
+    sudo a2enmod ssl headers request remoteip rewrite proxy proxy_html proxy_http proxy_wstunnel xml2enc
     sudo systemctl restart apache2
 }
 

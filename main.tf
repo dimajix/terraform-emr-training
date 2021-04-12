@@ -63,7 +63,8 @@ module "proxy" {
   source = "./proxy"
   tags   = var.common_tags
   names = module.emr.names
-  targets = module.emr.master_public_dns
+  public_masters = module.emr.master_public_dns
+  private_masters = module.emr.master_private_dns
 
   # Configure the domain
   proxy_domain = "training.dimajix-aws.net"  

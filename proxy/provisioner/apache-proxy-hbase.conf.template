@@ -19,7 +19,8 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:16010/ /
+    ProxyHTMLURLMap http://{{public_master}}:16010/ /
+    ProxyHTMLURLMap http://{{private_master}}:16010/ /
     <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -27,7 +28,7 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-	    ProxyPass http://{{target_master}}:16010/
+	    ProxyPass http://{{private_master}}:16010/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
@@ -63,7 +64,8 @@
     ProxyHTMLExtended Off
     AllowEncodedSlashes NoDecode
 
-    ProxyHTMLURLMap http://{{target_master}}:16010/ /
+    ProxyHTMLURLMap http://{{public_master}}:16010/ /
+    ProxyHTMLURLMap http://{{private_master}}:16010/ /
     <Location />
         AuthType Basic
         AuthName "Dimajix Training Environment"
@@ -71,7 +73,7 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-	    ProxyPass http://{{target_master}}:16010/
+	    ProxyPass http://{{private_master}}:16010/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1

@@ -65,13 +65,3 @@ resource "aws_route53_record" "hue" {
   ttl     = "300"
   records = [element(var.targets, count.index)]
 }
-
-resource "aws_route53_record" "hbase" {
-  count   = length(var.names)
-  zone_id = data.aws_route53_zone.emr.zone_id
-  name    = "hbase.${element(var.names, count.index)}"
-  type    = "CNAME"
-  ttl     = "300"
-  records = [element(var.targets, count.index)]
-}
-

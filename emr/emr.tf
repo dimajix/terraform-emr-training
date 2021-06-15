@@ -2,7 +2,8 @@ resource "aws_emr_cluster" "cluster" {
   count         = length(var.names)
   name          = var.names[count.index]
   release_label = var.release
-  applications  = concat(var.applications)
+  applications  = concat(var.applications)  
+  log_uri       = var.log_uri
 
   ec2_attributes {
     subnet_id                         = var.subnet_id
@@ -55,10 +56,6 @@ resource "aws_emr_cluster" "cluster" {
   ]
 
   #bootstrap_action {
-  #  path = "s3://dimajix-training/scripts/aws/setup-training.sh"
-  #  name = "setup-training"
-  #}
-  #bootstrap_action {
   #  path = "s3://dimajix-training/scripts/aws/install-kafka.sh"
   #  name = "install-kafka"
   #}
@@ -66,12 +63,23 @@ resource "aws_emr_cluster" "cluster" {
     path = "s3://dimajix-training/scripts/aws/install-jupyter-2020.11.sh"
     name = "install-jupyter"
   }
+  #bootstrap_action {
+  #  path = "s3://dimajix-training/scripts/aws/setup-training.sh"
+  #  name = "setup-training"
+  #}
+  bootstrap_action {
+    path = "s3://dimajix-training/scripts/aws/setup-pyspark-advanced.sh"
+    name = "setup-training"
+  }
 }
 
 
 data "aws_instance" "cluster" {
+  count         = length(var.names)
+
   filter {
     name   = "dns-name"
-    values = aws_emr_cluster.cluster.*.master_public_dns
+    #values = aws_emr_cluster.cluster.*.master_public_dns
+    values = [element(aws_emr_cluster.cluster.*.master_public_dns, count.index)]
   }
 }

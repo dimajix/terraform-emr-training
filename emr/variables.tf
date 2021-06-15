@@ -40,6 +40,9 @@ variable "applications" {
   default = ["Spark", "Hadoop", "Pig", "Hue", "Zeppelin", "Hive", "HCatalog", "HBase", "Presto", "Tez", "ZooKeeper"]
 }
 
+variable "log_uri" {
+}
+
 variable "vpc_id" {
 }
 

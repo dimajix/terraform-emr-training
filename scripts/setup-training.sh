@@ -37,7 +37,7 @@ install_training_repo() {
 
 
 create_mysql_database() {
-    sudo yum -y install mariadb
+    sudo yum -y install mariadb-server
     sudo systemctl start mariadb
 
     exec_mysql "CREATE DATABASE IF NOT EXISTS training;"

@@ -3,3 +3,4 @@ aws-config.tf
 terraform.tfstate
 terraform.tfstate.backup
 **/*.iml
+.idea/**

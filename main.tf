@@ -36,7 +36,7 @@ module "emr" {
 
   # Configuration: Set the cluster names
   #names = ["cl1","cl2","cl3","cl4","cl5","cl6","cl7"]
-  names = ["kku"]
+  names = ["kku", "cl1"]
   # Configuration: Set the desired EMR release
   release = "emr-6.2.0"
   # Configuration: Set the desired EMR components
@@ -51,6 +51,8 @@ module "emr" {
   worker_ebs_size = "40"
   worker_bid_price = "" # 0.60
   worker_count = 1
+  # Setup logging
+  log_uri = "s3://dimajix-logs/training/emr"
 
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.public_subnets[0]
@@ -90,3 +92,4 @@ module "route53" {
   # Configuration: Set the Route53 zone to use
   zone_name = "training.dimajix-aws.net"
 }
+

@@ -1,22 +1,13 @@
 <html>
 <h1>Amazon EMR Environment</h1>
 
-<h2>Services (https)</h2>
+<h2>Services</h2>
 <ul>
 <li><a href="https://rm.{{aliasHostName}}">YARN Resoucer Manager</a></li>
 <li><a href="https://nn.{{aliasHostName}}">HDFS Namenode</a></li>
 <li><a href="https://hue.{{aliasHostName}}">Hue</a></li>
 <li><a href="https://jupyter.{{aliasHostName}}">Jupyter Notebook</a></li>
 <li><a href="https://zeppelin.{{aliasHostName}}">Zeppelin Notebook</a></li>
-</ul>
-
-<h2>Services (http)</h2>
-<ul>
-<li><a href="http://rm.{{aliasHostName}}">YARN Resoucer Manager</a></li>
-<li><a href="http://nn.{{aliasHostName}}">HDFS Namenode</a></li>
-<li><a href="http://hue.{{aliasHostName}}">Hue</a></li>
-<li><a href="http://jupyter.{{aliasHostName}}">Jupyter Notebook</a></li>
-<li><a href="http://zeppelin.{{aliasHostName}}">Zeppelin Notebook</a></li>
 </ul>
 
 <!--

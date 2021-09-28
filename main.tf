@@ -35,20 +35,20 @@ module "emr" {
   tags   = var.common_tags
 
   # Configuration: Set the cluster names
-  #names = ["cl1","cl2","cl3","cl4","cl5","cl6","cl7"]
-  names = ["kku", "cl1"]
+  #names = ["kku","cl1","cl2","cl3","cl4","cl5","cl6","cl7","cl8","cl9","cl10"]
+  names = ["kku"]
   # Configuration: Set the desired EMR release
-  release = "emr-6.2.0"
+  release = "emr-6.3.0"
   # Configuration: Set the desired EMR components
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
   # Configuration: Set the desired EC2 instance type for the master
   # Refer to https://aws.amazon.com/de/ec2/spot/pricing/ for spot pricing
   master_type = "m5.xlarge"
-  master_ebs_size = "40"
+  master_ebs_size = "60"
   master_bid_price = "" # 0.30
   # Configuration: Set the desired EC2 instance type for the workers
   worker_type = "m5.xlarge"
-  worker_ebs_size = "40"
+  worker_ebs_size = "120"
   worker_bid_price = "" # 0.60
   worker_count = 1
   # Setup logging
@@ -71,7 +71,7 @@ module "proxy" {
   # Configure the domain
   proxy_domain = "training.dimajix-aws.net"  
   # Configuration: Set the user name for basic auth
-  proxy_user = "dimajix"
+  proxy_user = "rewe"
   # Configuration: Set the password for basic auth
   proxy_password = "dmx2021"
 

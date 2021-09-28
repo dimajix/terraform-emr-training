@@ -55,22 +55,22 @@ resource "aws_emr_cluster" "cluster" {
     aws_security_group.slave,
   ]
 
-  #bootstrap_action {
-  #  path = "s3://dimajix-training/scripts/aws/install-kafka.sh"
-  #  name = "install-kafka"
-  #}
+  bootstrap_action {
+    path = "s3://dimajix-training/scripts/aws/install-kafka.sh"
+    name = "install-kafka"
+  }
   bootstrap_action {
     path = "s3://dimajix-training/scripts/aws/install-jupyter-2020.11.sh"
     name = "install-jupyter"
   }
-  #bootstrap_action {
-  #  path = "s3://dimajix-training/scripts/aws/setup-training.sh"
-  #  name = "setup-training"
-  #}
   bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/setup-pyspark-advanced.sh"
+    path = "s3://dimajix-training/scripts/aws/setup-training.sh"
     name = "setup-training"
   }
+  #bootstrap_action {
+  #  path = "s3://dimajix-training/scripts/aws/setup-pyspark-advanced.sh"
+  #  name = "setup-training"
+  #}
 }
 
 

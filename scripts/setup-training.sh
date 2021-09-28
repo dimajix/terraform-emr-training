@@ -10,12 +10,12 @@ is_master() {
 
 
 exec_mysql() {
-    mysql --user=root -e "$@"
+    sudo mysql --user=root -e "$@"
 }
 
 
 install_training_repo() {
-    sudo yum -y install git
+    sudo yum -y install git python2-boto3
 
     git clone https://github.com/dimajix/spark-training.git /home/hadoop/spark-training
     chown hadoop:hadoop /home/hadoop/spark-training

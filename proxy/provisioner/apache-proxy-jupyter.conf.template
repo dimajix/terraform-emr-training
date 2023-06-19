@@ -10,10 +10,6 @@
     RequestHeader set X-Forwarded-Port "80"
 
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
-    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
-    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
-    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
 
     ProxyVia Off
     ProxyRequests off
@@ -38,10 +34,14 @@
         # SetEnv proxy-nokeepalive 1
     </Location>
     <Location /api/kernels/>
+        AuthType None
+        Require all granted
         ProxyPass ws://{{private_master}}:8899/api/kernels/
         ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
+        AuthType None
+        Require all granted
         ProxyPass ws://{{private_master}}:8899/terminals/websocket/
         ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>
@@ -67,10 +67,6 @@
     RequestHeader set X-Forwarded-Port "443"
 
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
-    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
-    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
-    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
 
     ProxyVia Off
     ProxyRequests off
@@ -89,16 +85,20 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-            ProxyPass http://{{private_master}}:8899/
+        ProxyPass http://{{private_master}}:8899/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
     </Location>
     <Location /api/kernels/>
+        AuthType None
+        Require all granted
         ProxyPass ws://{{private_master}}:8899/api/kernels/
         ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
+        AuthType None
+        Require all granted
         ProxyPass ws://{{private_master}}:8899/terminals/websocket/
         ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>

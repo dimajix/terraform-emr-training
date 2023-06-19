@@ -60,15 +60,19 @@ resource "aws_emr_cluster" "cluster" {
   #  name = "install-kafka"
   #}
   bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/install-jupyter-2020.11.sh"
+    path = "s3://dimajix-training/scripts/aws/install-jupyter-2022.05.sh"
     name = "install-jupyter"
   }
+  #bootstrap_action {
+  #  path = "s3://dimajix-training/scripts/aws/setup-training.sh"
+  #  name = "setup-training"
+  #}
+  #bootstrap_action {
+  #  path = "s3://dimajix-training/scripts/aws/setup-pyspark-advanced.sh"
+  #  name = "setup-training"
+  #}
   bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/setup-training.sh"
-    name = "setup-training"
-  }
-  bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/setup-pyspark-advanced.sh"
+    path = "s3://dimajix-training/scripts/aws/setup-pyspark-datascience.sh"
     name = "setup-training"
   }
 }

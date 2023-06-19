@@ -38,7 +38,7 @@ module "emr" {
   #names = ["kku","cl1","cl2","cl3","cl4","cl5","cl6"]
   names = ["kku"]
   # Configuration: Set the desired EMR release
-  release = "emr-6.4.0"
+  release = "emr-6.8.0"
   # Configuration: Set the desired EMR components
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
   # Configuration: Set the desired EC2 instance type for the master

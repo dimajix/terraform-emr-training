@@ -1,6 +1,7 @@
 resource "aws_instance" "proxy" {
   # ami = "ami-05c26ae4789875080"
-  ami = "ami-0bdbe51a2e8070ff2"
+  # ami = "ami-0bdbe51a2e8070ff2"
+  ami = "ami-04e601abe3e1a910f"
   key_name = var.ssh_key_id
   instance_type = "c5.xlarge"
 

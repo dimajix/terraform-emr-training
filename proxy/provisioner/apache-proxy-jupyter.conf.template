@@ -28,7 +28,7 @@
         AuthUserFile "{{htpasswd}}"
         Require user {{username}}
 
-	    ProxyPass http://{{private_master}}:8899/
+        ProxyPass http://{{private_master}}:8899/
         ProxyPassReverse /
         # RequestHeader   unset   Accept-Encoding
         # SetEnv proxy-nokeepalive 1
@@ -36,13 +36,13 @@
     <Location /api/kernels/>
         AuthType None
         Require all granted
-        ProxyPass ws://{{private_master}}:8899/api/kernels/
+        ProxyPass ws://{{private_master}}:8899/api/kernels/ upgrade=websocket
         ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
         AuthType None
         Require all granted
-        ProxyPass ws://{{private_master}}:8899/terminals/websocket/
+        ProxyPass ws://{{private_master}}:8899/terminals/websocket/ upgrade=websocket
         ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>
 </VirtualHost>
@@ -93,13 +93,13 @@
     <Location /api/kernels/>
         AuthType None
         Require all granted
-        ProxyPass ws://{{private_master}}:8899/api/kernels/
+        ProxyPass ws://{{private_master}}:8899/api/kernels/ upgrade=websocket
         ProxyPassReverse ws://{{private_master}}:8899/api/kernels/
     </Location>
     <Location /terminals/websocket/>
         AuthType None
         Require all granted
-        ProxyPass ws://{{private_master}}:8899/terminals/websocket/
+        ProxyPass ws://{{private_master}}:8899/terminals/websocket/ upgrade=websocket
         ProxyPassReverse ws://{{private_master}}:8899/terminals/websocket/
     </Location>
 </VirtualHost>

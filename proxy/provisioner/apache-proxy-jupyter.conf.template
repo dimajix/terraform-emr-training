@@ -10,6 +10,11 @@
     RequestHeader set X-Forwarded-Port "80"
 
     RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+    RewriteRule .* "ws://{{private_master}}:8899%{REQUEST_URI}" [P,L,END]
 
     ProxyVia Off
     ProxyRequests off
@@ -67,7 +72,12 @@
     RequestHeader set X-Forwarded-Port "443"
 
     RewriteEngine On
-
+    RewriteCond %{REQUEST_URI} ^/api/kernels/ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/terminals/websocket/ [NC,OR]
+    RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
+    RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+    RewriteRule .* "ws://{{private_master}}:8899%{REQUEST_URI}" [P,L,END]
+    
     ProxyVia Off
     ProxyRequests off
     ProxyPreserveHost On

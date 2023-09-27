@@ -10,6 +10,8 @@ resource "aws_emr_cluster" "cluster" {
     key_name                          = element(var.ssh_key_ids, count.index)
     emr_managed_master_security_group = aws_security_group.master.id
     emr_managed_slave_security_group  = aws_security_group.slave.id
+    service_access_security_group = aws_security_group.service.id
+
 
     # additional_master_security_groups = aws_security_group.allow_ssh.id
     instance_profile = aws_iam_instance_profile.training_ec2_profile.arn
@@ -77,13 +79,3 @@ resource "aws_emr_cluster" "cluster" {
   }
 }
 
-
-data "aws_instance" "cluster" {
-  count         = length(var.names)
-
-  filter {
-    name   = "dns-name"
-    #values = aws_emr_cluster.cluster.*.master_public_dns
-    values = [element(aws_emr_cluster.cluster.*.master_public_dns, count.index)]
-  }
-}

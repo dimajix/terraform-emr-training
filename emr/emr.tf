@@ -17,7 +17,7 @@ resource "aws_emr_cluster" "cluster" {
     instance_profile = aws_iam_instance_profile.training_ec2_profile.arn
   }
 
-  ebs_root_volume_size = "16"
+  ebs_root_volume_size = "32"
 
   master_instance_group {
     instance_type = var.master_type
@@ -62,7 +62,7 @@ resource "aws_emr_cluster" "cluster" {
   #  name = "install-kafka"
   #}
   bootstrap_action {
-    path = "s3://dimajix-training/scripts/aws/install-jupyter-2022.05.sh"
+    path = "s3://dimajix-training/scripts/aws/install-jupyter-2023.07.sh"
     name = "install-jupyter"
   }
   #bootstrap_action {

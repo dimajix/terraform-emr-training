@@ -15,6 +15,7 @@
     RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
     RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
     RewriteRule .* "ws://{{private_master}}:8899%{REQUEST_URI}" [P,L,END]
+    #RewriteRule .* "ws://jupyter.{{aliasHostName}}%{REQUEST_URI}" [P,L,END]
 
     ProxyVia Off
     ProxyRequests off
@@ -77,7 +78,8 @@
     RewriteCond %{HTTP:Upgrade} ^WebSocket$ [NC,OR]
     RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
     RewriteRule .* "ws://{{private_master}}:8899%{REQUEST_URI}" [P,L,END]
-    
+    #RewriteRule .* "wss://jupyter.{{aliasHostName}}%{REQUEST_URI}" [P,L,END]
+
     ProxyVia Off
     ProxyRequests off
     ProxyPreserveHost On

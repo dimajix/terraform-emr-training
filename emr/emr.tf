@@ -1,6 +1,13 @@
 resource "aws_emr_cluster" "cluster" {
-  count         = length(var.names)
-  name          = var.names[count.index]
+  count = length(var.names)
+  name = var.names[count.index]
+  tags = merge( var.tags, { "Name" = element(var.names, count.index) } )
+  depends_on = [
+    var.vpc_natgw_id,
+    aws_security_group.master,
+    aws_security_group.slave,
+  ]
+
   release_label = var.release
   applications  = concat(var.applications)  
   log_uri       = var.log_uri
@@ -11,7 +18,6 @@ resource "aws_emr_cluster" "cluster" {
     emr_managed_master_security_group = aws_security_group.master.id
     emr_managed_slave_security_group  = aws_security_group.slave.id
     service_access_security_group = aws_security_group.service.id
-
 
     # additional_master_security_groups = aws_security_group.allow_ssh.id
     instance_profile = aws_iam_instance_profile.training_ec2_profile.arn
@@ -40,22 +46,10 @@ resource "aws_emr_cluster" "cluster" {
     }
   }
 
-  tags = merge(
-    var.tags,
-    {
-      "name" = element(var.names, count.index)
-    },
-  )
-
   # configurations = "s3://dimajix-training/scripts/aws/emr-configurations.json"
   configurations = file("emr/configuration.json")
 
   service_role = aws_iam_role.training_emr_service_role.arn
-
-  depends_on = [
-    aws_security_group.master,
-    aws_security_group.slave,
-  ]
 
   #bootstrap_action {
   #  path = "s3://dimajix-training/scripts/aws/install-kafka.sh"

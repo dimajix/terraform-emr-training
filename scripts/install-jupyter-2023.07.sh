@@ -32,7 +32,7 @@ install_anaconda() {
     sudo sh ${ANACONDA_INSTALLER} -f -b -p ${ANACONDA_PREFIX}
     sudo rm -f ${ANACONDA_INSTALLER}
     
-    sudo yum -y install cmake3 libzstd
+    sudo yum -y install cmake3 libzstd python3-boto3 python2-boto3
     sudo ln -sf /usr/bin/cmake3 /usr/bin/cmake
 
     # Update some components, otherwise PyArrow cannot be installed
@@ -73,7 +73,7 @@ install_pyspark_kernel() {
   "PYTHONPATH": "${SPARK_HOME}/python/:${SPARK_HOME}/python/lib/py4j-src.zip",
   "PYTHONSTARTUP": "${SPARK_HOME}/python/pyspark/shell.py",
   "PYSPARK_PYTHON": "${ANACONDA_PREFIX}/bin/python3",
-  "PYSPARK_SUBMIT_ARGS": "--master ${SPARK_MASTER} --driver-memory=2G --executor-cores=4 --executor-memory=4G pyspark-shell"
+  "PYSPARK_SUBMIT_ARGS": "--master ${SPARK_MASTER} --driver-memory=2G pyspark-shell"
  }
 }
 EOL

@@ -10,6 +10,7 @@ variable "private_masters" {
 }
 
 variable "vpc_id" {}
+variable "vpc_natgw_id" {}
 variable "subnet_id" {}
 
 variable "ssh_key_id" {}

@@ -1,9 +1,14 @@
 resource "aws_instance" "proxy" {
+  depends_on = [
+    var.vpc_natgw_id
+  ]
+  tags = merge( { "Name" = "training-emr-proxy" }, var.tags )
+
   # ami = "ami-05c26ae4789875080"
   # ami = "ami-0bdbe51a2e8070ff2"
   ami = "ami-04e601abe3e1a910f"
-  key_name = var.ssh_key_id
   instance_type = "c5.xlarge"
+  key_name = var.ssh_key_id
 
   root_block_device {
     volume_type = "gp2"
@@ -43,8 +48,6 @@ resource "aws_instance" "proxy" {
       "sh /home/ubuntu/provisioner/provision.sh -d ${var.proxy_domain} -u ${var.proxy_user} -p ${var.proxy_password} -C /home/ubuntu/certs --pubic-masters ${join(",",var.public_masters)} --private-masters ${join(",",var.private_masters)} --names ${join(",",var.names)}"
     ]
   }
-
-  tags = merge( { "Name" = "training-emr-proxy" }, var.tags )
 }
 
 

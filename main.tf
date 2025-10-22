@@ -24,7 +24,7 @@ module "vpc" {
   private_subnets = ["10.200.1.0/24"]
   public_subnets  = ["10.200.101.0/24"]
   enable_nat_gateway = "true"
-  single_nat_gateway = "false"
+  single_nat_gateway = "true"
   enable_dns_hostnames = "true"
   enable_dns_support = "true"
 }
@@ -67,16 +67,16 @@ module "emr" {
   names = ["kku"]
   #names = ["cl1","kku"]
   # Configuration: Set the desired EMR release
-  release = "emr-6.13.0"
+  release = "emr-7.10.0"
   # Configuration: Set the desired EMR components
   applications = ["Spark","Hadoop","Hue","Zeppelin","Hive","Zookeeper"]
   # Configuration: Set the desired EC2 instance type for the master
   # Refer to https://aws.amazon.com/de/ec2/spot/pricing/ for spot pricing
-  master_type = "m5.xlarge"
+  master_type = "m6i.xlarge"
   master_ebs_size = "60"
   master_bid_price = "" # 0.30
   # Configuration: Set the desired EC2 instance type for the workers
-  worker_type = "m5.xlarge"
+  worker_type = "m6i.xlarge"
   worker_ebs_size = "120"
   worker_bid_price = "" # 0.60
   worker_count = 1
@@ -84,6 +84,7 @@ module "emr" {
   log_uri = "s3://dimajix-logs/training/emr"
 
   vpc_id = module.vpc.vpc_id
+  vpc_natgw_id = module.vpc.natgw_ids[0]
   subnet_id = module.vpc.private_subnets[0]
   edge_security_group_id = module.proxy.security_group_id
   ssh_key_ids = [aws_key_pair.deployer.id]
@@ -105,6 +106,7 @@ module "proxy" {
   proxy_password = "dmx2023"
 
   vpc_id = module.vpc.vpc_id
+  vpc_natgw_id = module.vpc.natgw_ids[0]
   subnet_id = module.vpc.public_subnets[0]
   ssh_key_id = aws_key_pair.deployer.id
   ssh_key = file("deployer-key")

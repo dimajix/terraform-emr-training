@@ -46,6 +46,9 @@ variable "log_uri" {
 variable "vpc_id" {
 }
 
+variable "vpc_natgw_id" {
+}
+
 variable "subnet_id" {
 }
 
